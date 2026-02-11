@@ -66,12 +66,14 @@ def extract_items(md_path):
 
 # ================= MAIN PIPELINE ================= #
 
-def process_invoice(image_id):
-    md_path = os.path.join(CROP_DIR, image_id, f"{image_id}.md")
+def process_invoice(md_file):
+    md_path = os.path.join(CROP_DIR, md_file)
 
     if not os.path.exists(md_path):
-        print(f"⚠️ Missing crop file for {image_id}")
+        print(f"⚠️ Missing file {md_file}")
         return
+
+    image_id = os.path.splitext(md_file)[0]
 
     items = extract_items(md_path)
 
@@ -90,9 +92,12 @@ def process_invoice(image_id):
 
     print(f"✅ Saved → {out_path}")
 
+
 def run_all():
-    for image_id in os.listdir(CROP_DIR):
-        process_invoice(image_id)
+    for file in os.listdir(CROP_DIR):
+        if file.endswith(".md"):
+            process_invoice(file)
+
 
 # ================= ENTRY ================= #
 
